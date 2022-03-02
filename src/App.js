@@ -1,6 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import { Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
+import Home from "./routes/home";
+import About from "./routes/about";
 
 export default function App() {
   return (
@@ -12,9 +18,14 @@ export default function App() {
         paddingBottom: "1rem",
       }}
     >
-      <Link to="/home">Home</Link> |{" "}
+      <Link to="/">Home</Link> |{" "}
       <Link to="/about">About</Link>
     </nav>
+    
+    <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Routes>
   </div>
   );
 }
