@@ -3,8 +3,6 @@ import React, {useState} from "react";
 export default function Home() {
   const [vals, setVals] = useState({
     name: "",
-    email: "",
-    phonenumber: "",
   });
 
   const handleChange = (event) => {
