@@ -1,7 +1,7 @@
 export default function About() {
     return (
-      <main style={{ padding: "1rem 0" }}>
-        <h2>About</h2>
+      <main className="p-4">
+        <h2 className="text-3xl font-bold">About</h2>
       </main>
     );
   }
