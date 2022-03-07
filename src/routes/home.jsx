@@ -8,24 +8,32 @@ export default function Home() {
   
   // const [vals, setVals] = useState([]);
   const [done, setDone] = useState(0);
-  const [datas, setDatas] = useState([]);
+  const [datas, setDatas] = useState(); //isinya index
   
   const todos = useSelector((state) => state.todoReducer.todos);
   const dispatch = useDispatch();
   
   const {
+    setValue,
     register,
     handleSubmit,
     reset,
   } = useForm({ defaultValues: { listTodo: "" } });
 
   const onSubmit = (data) => {
-    let updatedValue = {};
-    updatedValue = { title: data["listTodo"], status: 0 };
-    dispatch(addTodo(updatedValue));
-    reset({listTodo: ""});
-    // setVals((vals) => [...vals, updatedValue]);
-    // localStorage.setItem("valss", JSON.stringify(vals));
+    if(datas == undefined){
+      let updatedValue = {};
+      updatedValue = { title: data["listTodo"], status: 0 };
+      dispatch(addTodo(updatedValue));
+      reset({listTodo: ""});
+      // setVals((vals) => [...vals, updatedValue]);
+      // localStorage.setItem("valss", JSON.stringify(vals));
+    } else {
+      let newArr = [...todos];
+      newArr[datas].title = data["listTodo"];
+      dispatch(editTodo(newArr));
+      setDatas();
+    }
   };
 
   const toggleSS = (index) => {
@@ -51,8 +59,13 @@ export default function Home() {
 
   const handleShow =  index => e => {
     const name = e.target.getAttribute("name");
-    setDatas({title : name, index : index});
+    setValue("listTodo", todos[index].title);
+    setDatas(index);
+    
   }
+  let one = todos.filter((item) => {
+    return item.status == 1
+  })
 
   const handleOnChange = index => e => {
     setDatas({title : e.target.value, index : index});
@@ -65,19 +78,22 @@ export default function Home() {
     setDatas([])
     // setVals(newArr);
   }
+
+  console.log("DATAS :", datas);
+  console.log("ONE :", one);
   
   // const valus = useContext(OurVals);
   // const OurVals = createContext(vals);
   // const Our = useContext(createContext(vals));
   // const rata =  JSON.parse(localStorage.getItem("valss"));
   
-  console.log('REDUX :',todos);
+  // console.log('REDUX :',todos);
   // console.log('VALS :',vals);
   // console.log('LOCAL :',OurVals);
   // console.log('CONTEXT :',rata);
 
   return (
-    <main className="h-96">
+    <main className="h-fit">
       <div className="h-100 w-auto flex items-center justify-center bg-teal-lightest font-sans">
         <div className="bg-white rounded shadow p-6 m-4 w-full lg:w-3/4 lg:max-w-lg">
           <div className="mb-4">
@@ -85,19 +101,18 @@ export default function Home() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex mt-4">
-                <input
+                <input 
                   {...register("listTodo", { required: true, maxLength: 20 })}
                   className="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker hover:bg-slate-300"
                   placeholder="Add Todo"
                 />
                 <input
                   className="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal-500"
-                  type="submit"
-                  value="Tambah"
+                  type="submit" value={datas !== undefined ? "Ubah" : "Tambah" }
                 />
               </div>
             </form>
-            { datas.title !== undefined ? 
+            {/* { datas.title !== undefined ? 
               <form onSubmit={(e) => e.preventDefault()}>
               <div className="flex mt-4">
                 <input value={datas.title} onChange={handleOnChange(datas.index)}
@@ -110,7 +125,7 @@ export default function Home() {
                 />
               </div>
             </form> : null
-            }
+            } */}
             
           </div>
           <div>
@@ -137,14 +152,15 @@ export default function Home() {
                 >
                   Remove
                 </button>
-                <button name={val.title} onClick={handleShow(index)} className="flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-yellow-500 "> Edit </button>
+                <button name={val.title} onClick={handleShow(index)} className="flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-yellow-500 ">
+                   Edit </button>
               </div>
             ))}
 
            
           </div>
           <h2> Total to do : {todos.length} </h2>
-          <h2> Total done : {done}</h2>
+          <h2> Total done : {one.length}</h2>
         </div>
       </div>
     </main>
