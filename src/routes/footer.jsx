@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 export default function Footer() {
     return(
         <footer className="text-center text-white" style={{backgroundColor: '#f1f1f1'}}>

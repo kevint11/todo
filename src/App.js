@@ -5,9 +5,11 @@ import {
   Route,
   Link,
 } from "react-router-dom";
+import { Provider } from "react-redux";
 import Home from "./routes/home";
 import About from "./routes/about";
 import Footer from "./routes/footer";
+import store from "./store";
 
 export default function App() {
   return (
@@ -67,12 +69,15 @@ export default function App() {
           </ul>
         </div>
       </div>
-      <Routes>
+
+    <Provider store={store}>
+      <Routes>  
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
       </Routes>
+    </Provider>
       </nav>
       <Footer />
-      </React.Fragment>
+  </React.Fragment>
   );
 }
